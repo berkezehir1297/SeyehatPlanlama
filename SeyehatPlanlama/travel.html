@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Seyahat Planlama</title>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1470&q=80') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 50, 0.35);
+            z-index: -1;
+        }
+
+        header {
+            margin-top: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 5px;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            color: #ddd;
+        }
+
+        header button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #4a90e2;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        header button:hover {
+            background: #357abd;
+        }
+
+        main {
+            width: 90%;
+            max-width: 900px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #333;
+            padding: 25px 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            backdrop-filter: blur(8px);
+        }
+
+        section {
+            background: #f0f8ff;
+            flex: 1 1 250px;
+            min-width: 250px;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+            display: flex;
+            flex-direction: column;
+        }
+
+        section h2 {
+            margin-bottom: 20px;
+            color: #2c3e50;
+            text-align: center;
+            font-size: 1.5rem;
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 6px;
+            margin-top: 10px;
+            color: #34495e;
+        }
+
+        input, select, textarea {
+            padding: 10px;
+            border: 2px solid #b0c4de;
+            border-radius: 10px;
+            font-size: 1rem;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: #4a90e2;
+            outline: none;
+        }
+
+        textarea {
+            min-height: 70px;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 12px 0;
+            border: none;
+            background: #4a90e2;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background: #357abd;
+        }
+
+        @media(max-width: 600px) {
+            main {
+                flex-direction: column;
+            }
+            section {
+                min-width: 100%;
+            }
+        }
+
+        .cikis-button-container {
+            text-align: center;
+            margin: 40px 0;
+            width: 100%;
+            max-width: 900px;
+        }
+        .cikis-button {
+            padding: 12px 25px;
+            background-color: #c0392b;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 1.1rem;
+        }
+        .cikis-button:hover {
+            background-color: #922b21;
+        }
+
+        
+        .sil-button {
+            background-color: #c0392b;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 4px 10px;
+            margin-left: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: background-color 0.3s;
+        }
+
+        .sil-button:hover {
+            background-color: #922b21;
+        }
+
+       
+        #plan-listesi {
+            margin-top: 15px;
+            max-height: 150px;
+            overflow-y: auto;
+            background: #e0ecff;
+            border-radius: 10px;
+            padding: 10px;
+            color: #34495e;
+        }
+
+        #plan-listesi li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 8px;
+            border-bottom: 1px solid #b0c4de;
+        }
+
+        #plan-listesi li:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 id="hosgeldinMesaji">Hoş geldiniz!</h1>
+        <p>Seyahat rotalarınızı oluşturun, konaklama seçeneklerinizi yönetin ve planlarınızı düzenleyin.</p>
+        <button onclick="window.location.href='rotalar.html'">Rota Listesi</button>
+    </header>
+
+    <main>
+      
+        <section id="rota-section">
+            <h2>Seyahat Rotası Ekle</h2>
+            <label for="rota-baslangic">Başlangıç Noktası:</label>
+            <input type="text" id="rota-baslangic" placeholder="Şehir veya yer adı" />
+
+            <label for="rota-bitis">Bitiş Noktası:</label>
+            <input type="text" id="rota-bitis" placeholder="Şehir veya yer adı" />
+
+            <label for="rota-notlar">Notlar:</label>
+            <textarea id="rota-notlar" placeholder="Eklemek istediğiniz notlar"></textarea>
+
+            <button onclick="rotaEkle()">Rota Ekle</button>
+        </section>
+
+       
+        <section id="konaklama-section">
+            <h2>Konaklama Seçenekleri</h2>
+            <label for="konaklama-adi">Konaklama Adı:</label>
+            <input type="text" id="konaklama-adi" placeholder="Otel, pansiyon vb." />
+
+            <label for="konaklama-fiyat">Fiyat (TL):</label>
+            <input type="number" id="konaklama-fiyat" placeholder="Örnek: 250" min="0" />
+
+            <button onclick="konaklamaEkle()">Konaklama Ekle</button>
+
+            <ul id="konaklama-listesi" style="margin-top:20px; list-style-type: none; padding-left: 0;"></ul>
+        </section>
+
+       
+        <section id="plan-section">
+            <h2>Seyahat Planını Düzenle</h2>
+
+            <label for="gidis-tarihi">Gidiş Tarihi:</label>
+            <input type="date" id="gidis-tarihi" />
+
+            <label for="donus-tarihi">Dönüş Tarihi:</label>
+            <input type="date" id="donus-tarihi" />
+
+            <label for="plan-detay">Yolculuk Notları:</label>
+            <textarea id="plan-detay" placeholder="Planınızla ilgili notlar ve detaylar"></textarea>
+
+            <button onclick="planDuzenle()">Planı Kaydet</button>
+            <p id="plan-kayit-msg" style="color: green; margin-top: 15px;"></p>
+
+           
+            <ul id="plan-listesi"></ul>
+        </section>
+    </main>
+
+    <div class="cikis-button-container">
+        <button class="cikis-button" onclick="logout()">Çıkış Yap</button>
+    </div>
+
+    <script>
+        function rotaEkle() {
+            const baslangic = document.getElementById('rota-baslangic').value.trim();
+            const bitis = document.getElementById('rota-bitis').value.trim();
+            const notlar = document.getElementById('rota-notlar').value.trim();
+
+            if (!baslangic || !bitis) {
+                alert('Lütfen başlangıç ve bitiş noktalarını doldurun.');
+                return;
+            }
+
+            let rotalar = JSON.parse(localStorage.getItem('rotalar') || '[]');
+            rotalar.push({ baslangic, bitis, notlar });
+            localStorage.setItem('rotalar', JSON.stringify(rotalar));
+
+            alert(`Rota eklendi:\nBaşlangıç: ${baslangic}\nBitiş: ${bitis}\nNotlar: ${notlar || 'Yok'}`);
+
+            document.getElementById('rota-baslangic').value = '';
+            document.getElementById('rota-bitis').value = '';
+            document.getElementById('rota-notlar').value = '';
+        }
+
+        function konaklamaEkle() {
+            const adi = document.getElementById('konaklama-adi').value.trim();
+            const fiyat = document.getElementById('konaklama-fiyat').value.trim();
+            if(!adi || !fiyat) {
+                alert('Konaklama adı ve fiyatı giriniz.');
+                return;
+            }
+
+            let konaklamalar = JSON.parse(localStorage.getItem('konaklamalar') || '[]');
+            konaklamalar.push({adi, fiyat});
+            localStorage.setItem('konaklamalar', JSON.stringify(konaklamalar));
+            listeleKonaklamalar();
+
+            document.getElementById('konaklama-adi').value = '';
+            document.getElementById('konaklama-fiyat').value = '';
+        }
+
+        function listeleKonaklamalar() {
+            const liste = document.getElementById('konaklama-listesi');
+            liste.innerHTML = '';
+            let konaklamalar = JSON.parse(localStorage.getItem('konaklamalar') || '[]');
+            if(konaklamalar.length === 0) {
+                liste.innerHTML = '<li>Henüz konaklama eklenmedi.</li>';
+                return;
+            }
+
+            konaklamalar.forEach((k, i) => {
+                const li = document.createElement('li');
+                li.textContent = `${k.adi} - ${k.fiyat} TL`;
+
+               
+                const silBtn = document.createElement('button');
+                silBtn.textContent = 'Sil';
+                silBtn.className = 'sil-button';
+                silBtn.onclick = function() {
+                    konaklamalar.splice(i, 1);
+                    localStorage.setItem('konaklamalar', JSON.stringify(konaklamalar));
+                    listeleKonaklamalar();
+                };
+                li.appendChild(silBtn);
+
+                liste.appendChild(li);
+            });
+        }
+
+        function planDuzenle() {
+            const gidis = document.getElementById('gidis-tarihi').value;
+            const donus = document.getElementById('donus-tarihi').value;
+            const detay = document.getElementById('plan-detay').value.trim();
+
+            if (!gidis || !donus || !detay) {
+                alert('Lütfen gidiş, dönüş tarihlerini ve yolculuk notlarını giriniz.');
+                return;
+            }
+
+            let planlar = JSON.parse(localStorage.getItem('planlar') || '[]');
+
+           
+            planlar.push({ gidis, donus, detay });
+            localStorage.setItem('planlar', JSON.stringify(planlar));
+
+           
+            document.getElementById('gidis-tarihi').value = '';
+            document.getElementById('donus-tarihi').value = '';
+            document.getElementById('plan-detay').value = '';
+
+            
+            const msg = document.getElementById('plan-kayit-msg');
+            msg.textContent = 'Planınız kaydedildi!';
+            setTimeout(() => msg.textContent = '', 4000);
+
+            listelePlanlar();
+        }
+
+        function listelePlanlar() {
+            const planListesi = document.getElementById('plan-listesi');
+            planListesi.innerHTML = '';
+
+            let planlar = JSON.parse(localStorage.getItem('planlar') || '[]');
+            if(planlar.length === 0) {
+                planListesi.innerHTML = '<li>Henüz plan eklenmedi.</li>';
+                return;
+            }
+
+            planlar.forEach((plan, i) => {
+                const li = document.createElement('li');
+                li.textContent = `Gidiş: ${plan.gidis}, Dönüş: ${plan.donus}, Notlar: ${plan.detay}`;
+
+                
+                const silBtn = document.createElement('button');
+                silBtn.textContent = 'Sil';
+                silBtn.className = 'sil-button';
+                silBtn.onclick = function() {
+                    planlar.splice(i, 1);
+                    localStorage.setItem('planlar', JSON.stringify(planlar));
+                    listelePlanlar();
+                };
+                li.appendChild(silBtn);
+
+                planListesi.appendChild(li);
+            });
+        }
+
+        function logout() {
+            localStorage.removeItem('rotalar');
+            localStorage.removeItem('konaklamalar');
+            localStorage.removeItem('planlar');
+            localStorage.removeItem('planDetay');
+            localStorage.removeItem('aktifKullanici');
+            alert('Çıkış yapıldı. Tüm veriler temizlendi.');
+            window.location.href = 'index.html';
+        }
+
+        window.onload = function () {
+            const aktifKullanici = localStorage.getItem("aktifKullanici");
+            const hosgeldin = document.getElementById("hosgeldinMesaji");
+            if (aktifKullanici) {
+                hosgeldin.textContent = `Hoş geldin, ${aktifKullanici}!`;
+            } else {
+                hosgeldin.textContent = "Hoş geldiniz!";
+            }
+
+            listeleKonaklamalar();
+            listelePlanlar();
+
+            const planKayitli = localStorage.getItem('planDetay');
+            if(planKayitli) {
+                try {
+                    const plan = JSON.parse(planKayitli);
+                    document.getElementById('gidis-tarihi').value = plan.gidis;
+                    document.getElementById('donus-tarihi').value = plan.donus;
+                    document.getElementById('plan-detay').value = plan.detay;
+                } catch {}
+            }
+        };
+    </script>
+</body>
+</html>

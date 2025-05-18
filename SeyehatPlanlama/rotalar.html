@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <title>Rota Listesi - Plaj Teması</title>
+    <style>
+       
+        body {
+            margin: 0;
+            padding: 30px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1470&q=80') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            min-height: 100vh;
+            position: relative;
+        }
+
+      
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 50, 0.35);
+            z-index: -1;
+        }
+
+      
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 25px 30px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            backdrop-filter: blur(8px);
+        }
+
+       
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 2.8rem;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+        }
+
+       
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: rgba(255,255,255,0.9);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        th, td {
+            padding: 15px;
+            border: 1px solid #ccc;
+            text-align: left;
+            color: #333;
+            font-weight: 600;
+            vertical-align: middle;
+        }
+
+        th {
+            background-color: #4a90e2;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        td {
+            background-color: #f9f9f9;
+            font-weight: 500;
+        }
+
+       
+        .btn-sil {
+            padding: 7px 14px;
+            background-color: #e74c3c;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+        .btn-sil:hover {
+            background-color: #c0392b;
+        }
+
+       
+        @media(max-width: 600px) {
+            body {
+                padding: 15px;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+            th, td {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Rota Listesi</h1>
+        <table id="rota-tablosu">
+            <thead>
+                <tr>
+                    <th>Başlangıç</th>
+                    <th>Bitiş</th>
+                    <th>Notlar</th>
+                    <th>İşlem</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+       
+        window.onload = function () {
+            rotaListele();
+        };
+
+       
+        function rotaListele() {
+            const tbody = document.querySelector('#rota-tablosu tbody');
+            const rotalar = JSON.parse(localStorage.getItem('rotalar') || '[]');
+            tbody.innerHTML = '';
+
+            if (rotalar.length === 0) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = '<td colspan="4" style="text-align:center; font-style: italic; color:#666;">Henüz rota eklenmedi.</td>';
+                tbody.appendChild(tr);
+                return;
+            }
+
+            rotalar.forEach((ro, index) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${ro.baslangic}</td>
+                    <td>${ro.bitis}</td>
+                    <td>${ro.notlar || '-'}</td>
+                    <td><button class="btn-sil" onclick="rotaSil(${index})">Sil</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        
+        function rotaSil(index) {
+            let rotalar = JSON.parse(localStorage.getItem('rotalar') || '[]');
+            rotalar.splice(index, 1); 
+            localStorage.setItem('rotalar', JSON.stringify(rotalar)); // 
+            rotaListele(); 
+        }
+    </script>
+</body>
+</html>

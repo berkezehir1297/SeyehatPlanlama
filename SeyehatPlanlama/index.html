@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Giriş Yap - Seyahat Planlama</title>
+    <style>
+       
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1470&q=80') no-repeat center center fixed;
+            background-size: cover;
+            position: relative;
+            color: #333;
+        }
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 0;
+        }
+        .login-box, .register-box {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px 35px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            width: 350px;
+            box-sizing: border-box;
+            position: relative;
+            z-index: 1;
+        }
+        .login-box h2, .register-box h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+            font-weight: 700;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 12px 15px;
+            margin: 12px 0 20px 0;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus, input[type="password"]:focus {
+            border-color: #4a90e2;
+            outline: none;
+        }
+        button {
+            width: 100%;
+            padding: 13px 0;
+            border: none;
+            background: #4a90e2;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background: #357abd;
+        }
+        .error-msg, .success-msg {
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        .error-msg {
+            color: #e74c3c;
+        }
+        .success-msg {
+            color: #27ae60;
+        }
+        .link-btn {
+            background: none;
+            border: none;
+            color: #4a90e2;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 15px;
+            text-decoration: underline;
+        }
+        .register-box {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-box" id="login-box">
+        <h2>Seyahat Planlama Giriş</h2>
+        <div id="login-error" class="error-msg"></div>
+        <input type="text" id="login-username" placeholder="Kullanıcı Adı" />
+        <input type="password" id="login-password" placeholder="Şifre" />
+        <button onclick="login()">Giriş Yap</button>
+        <button class="link-btn" onclick="showRegister()">Kayıt Ol</button>
+    </div>
+
+    <div class="register-box" id="register-box">
+        <h2>Kayıt Ol</h2>
+        <div id="register-error" class="error-msg"></div>
+        <div id="register-success" class="success-msg"></div>
+        <input type="text" id="register-username" placeholder="Yeni Kullanıcı Adı" />
+        <input type="password" id="register-password" placeholder="Yeni Şifre" />
+        <button onclick="register()">Kayıt Ol</button>
+        <button class="link-btn" onclick="showLogin()">Geri Dön</button>
+    </div>
+
+    <script>
+      
+        function login() {
+            const username = document.getElementById('login-username').value.trim();
+            const password = document.getElementById('login-password').value.trim();
+            const errorMsg = document.getElementById('login-error');
+
+            
+            if (!username || !password) {
+                errorMsg.textContent = 'Lütfen kullanıcı adı ve şifre girin.';
+                return;
+            }
+
+            
+            if (username === 'admin' && password === '1234') {
+                localStorage.setItem('activeUser', 'admin');
+                errorMsg.textContent = '';
+                window.location.href = 'travel.html';
+                return;
+            }
+
+            
+            const usersJSON = localStorage.getItem('users');
+            const users = usersJSON ? JSON.parse(usersJSON) : [];
+
+            
+            const user = users.find(u => u.username === username && u.password === password);
+
+            if (user) {
+                
+                localStorage.setItem('activeUser', username);
+                errorMsg.textContent = '';
+                window.location.href = 'travel.html';
+            } else {
+                
+                errorMsg.textContent = 'Kullanıcı adı veya şifre hatalı!';
+            }
+        }
+
+        
+        function showRegister() {
+            document.getElementById('login-box').style.display = 'none';
+            document.getElementById('register-box').style.display = 'block';
+            clearMessagesAndInputs();
+        }
+
+        
+        function showLogin() {
+            document.getElementById('register-box').style.display = 'none';
+            document.getElementById('login-box').style.display = 'block';
+            clearMessagesAndInputs();
+        }
+
+        
+        function clearMessagesAndInputs() {
+            document.getElementById('login-error').textContent = '';
+            document.getElementById('register-error').textContent = '';
+            document.getElementById('register-success').textContent = '';
+            document.getElementById('login-username').value = '';
+            document.getElementById('login-password').value = '';
+            document.getElementById('register-username').value = '';
+            document.getElementById('register-password').value = '';
+        }
+
+        
+        function register() {
+            const username = document.getElementById('register-username').value.trim();
+            const password = document.getElementById('register-password').value.trim();
+            const errorMsg = document.getElementById('register-error');
+            const successMsg = document.getElementById('register-success');
+
+            if (username === '' || password === '') {
+                errorMsg.textContent = 'Kullanıcı adı ve şifre boş olamaz.';
+                successMsg.textContent = '';
+                return;
+            }
+
+            if (username.toLowerCase() === 'admin') {
+                errorMsg.textContent = 'Bu kullanıcı adı kullanılamaz.';
+                successMsg.textContent = '';
+                return;
+            }
+
+            const usersJSON = localStorage.getItem('users');
+            const users = usersJSON ? JSON.parse(usersJSON) : [];
+
+            if (users.some(u => u.username === username)) {
+                errorMsg.textContent = 'Bu kullanıcı adı zaten kayıtlı.';
+                successMsg.textContent = '';
+                return;
+            }
+
+            users.push({ username: username, password: password });
+            localStorage.setItem('users', JSON.stringify(users));
+            localStorage.setItem(`plans_${username}`, JSON.stringify([])); // Kullanıcıya boş plan dizisi oluştur
+            successMsg.textContent = 'Kayıt başarılı! Giriş yapabilirsiniz.';
+            errorMsg.textContent = '';
+            document.getElementById('register-username').value = '';
+            document.getElementById('register-password').value = '';
+        }
+
+        
+        ['login-password', 'login-username', 'register-password', 'register-username'].forEach(id => {
+            document.getElementById(id).addEventListener('keyup', function (e) {
+                if (e.key === 'Enter') {
+                    if (id.startsWith('login')) login();
+                    else register();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
